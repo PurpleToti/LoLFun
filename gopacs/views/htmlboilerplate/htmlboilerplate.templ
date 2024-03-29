@@ -1,0 +1,19 @@
+package view_htmlboilerplate
+
+templ HtmlBoilerplate(title string, head_adds ...templ.Component) {
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8" />
+            <title>{ title }</title>
+            <meta name="viewport" content="width=device-width,initial-scale=1" />
+            <link rel="stylesheet" type="text/css" href="/ressources/css/reset.css"/>
+            if len(head_adds) != 0 {
+                @head_adds[0]
+            }
+        </head>
+        <body>
+            { children... }
+        </body>
+    </html>
+}

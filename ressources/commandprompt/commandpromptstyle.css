@@ -1,0 +1,17 @@
+body {
+    display: grid;
+    height: 100vh;
+}
+
+#consolecontainer {
+    align-self: center;
+    justify-self: center;
+
+    display: grid;
+    height: 98vh;
+    width: 98vw;
+}
+
+#command_prompt_input_area {
+    resize: none;
+}

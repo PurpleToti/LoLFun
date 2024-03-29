@@ -1,0 +1,16 @@
+package view_commandprompt
+
+import "LoLFun/gopacs/views/htmlboilerplate"
+
+templ head_adds() {
+    <link rel="stylesheet" type="text/css" href="/ressources/commandprompt/commandpromptstyle.css"/>
+}
+
+templ AdminCommandPromptPage() {
+    @view_htmlboilerplate.HtmlBoilerplate("Admin Command Prompt", head_adds()) {
+        <div id="consolecontainer">
+            <textarea id="command_prompt_input_area" spellcheck="false"></textarea>
+        </div>
+        <script src="/ressources/commandprompt/commandpromptscript.js"></script>
+    }
+}

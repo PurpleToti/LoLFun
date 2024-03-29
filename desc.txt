@@ -1,0 +1,18 @@
+DATA:
+
+
+SESSIONDATA:
+ServerSide:
+-CookiesUsersArray
+-UsersArray
+ClientSide:
+-Cookie
+
+ACCES:
+ServerSide:
+ALL
+ClientSide:
+0 = No info / lowest data acces:
+Cookie
+1 = Logs submitted / high data acces
+UsersArray
