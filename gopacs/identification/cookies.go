@@ -33,7 +33,7 @@ func UserCookieThere(c echo.Context) (bool, error) {
 		return false, err
 	}
 
-	if cookie.Expires.Compare(time.Now()) == -1 {
+	if cookie.Expires.Compare(time.Now()) == 1 {
 		return false, nil
 	}
 

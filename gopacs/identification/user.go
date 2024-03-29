@@ -22,8 +22,16 @@ func (user *User) Stringify() string {
 }
 
 func getNewUserId() string {
-	count++
-	return string(count)
+	user_id := ""
+	count_copy := count
+	for {
+		if count_copy <= 61 {
+			break
+		}
+		user_id += string(65 + (count_copy % 61))
+		count_copy /= 61
+	}
+	return user_id
 }
 
 func CreateUser(users_map map[string]*User) (*User, string) {

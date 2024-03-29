@@ -17,3 +17,11 @@ func meCommand(user *identification.User) jsonCommandResponse {
 		details:    "To see how the server sees you...",
 	}
 }
+
+func meNameCommand(user *identification.User, new_username string) jsonCommandResponse {
+	user.Name = new_username
+	return jsonCommandResponse{
+		to_display: user.Stringify(),
+		details:    "Change your username",
+	}
+}
