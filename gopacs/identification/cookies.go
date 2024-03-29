@@ -40,6 +40,14 @@ func UserCookieThere(c echo.Context) (bool, error) {
 	return true, nil
 }
 
+func GetUserCookie(c echo.Context) (*http.Cookie, error) {
+	cookie, err := c.Cookie(user_cookie_name)
+	if err != nil {
+		return nil, err
+	}
+	return cookie, nil
+}
+
 func GetUserCookieValue(c echo.Context) (string, error) {
 	cookie, err := c.Cookie(user_cookie_name)
 	if err != nil {

@@ -1,6 +1,8 @@
 package identification
 
 import (
+	"time"
+
 	"github.com/labstack/echo/v4"
 )
 
@@ -16,9 +18,16 @@ func HandleIdentification(c echo.Context) (*User, error) {
 		if err != nil {
 			return nil, err
 		}
+		user.Last_interaction = time.Now()
+		cookie, err := GetUserCookie(c)
+		if err != nil {
+			return nil, err
+		}
+		cookie.Expires = time.Now().Add(5 * time.Minute)
 		return user, nil
 	} else {
-		user := CreateUser(UsersMap)
-		return user, nil
+		new_user, new_user_id := CreateUser(UsersMap)
+		WriteUserCookie(c, new_user_id)
+		return new_user, nil
 	}
 }
