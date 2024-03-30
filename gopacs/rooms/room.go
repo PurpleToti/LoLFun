@@ -2,11 +2,6 @@ package rooms
 
 import "time"
 
-const users_per_room int = 5
-
-var count rune = 0
-var user_expire_time time.Duration = 5 * time.Minute
-
 type Room struct {
 	Room_id                string
 	Last_interaction       time.Time

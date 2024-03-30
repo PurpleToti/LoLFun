@@ -6,8 +6,6 @@ import (
 	"time"
 )
 
-var count rune = 0
-
 type User struct {
 	User_id          string
 	Name             string
