@@ -9,12 +9,14 @@ import (
 var count rune = 0
 
 type User struct {
+	User_id          string
 	Name             string
 	Last_interaction time.Time
 }
 
 func (user *User) Stringify() string {
 	repr := "User{"
+	repr += data_utils.GetFormattedKeyValue("User_id", user.User_id, "'") + ","
 	repr += data_utils.GetFormattedKeyValue("Name", user.Name, "'") + ","
 	repr += data_utils.GetFormattedKeyValue("LastInteraction", user.Last_interaction.String(), "'")
 	repr += "}"
@@ -34,14 +36,15 @@ func getNewUserId() string {
 	return user_id
 }
 
-func CreateUser(users_map map[string]*User) (*User, string) {
+func CreateUser(users_map map[string]*User) *User {
+	new_user_id := getNewUserId()
 	new_user := &User{
+		User_id:          new_user_id,
 		Name:             "NaN",
 		Last_interaction: time.Now(),
 	}
-	new_user_id := getNewUserId()
-	users_map[new_user_id] = new_user
-	return new_user, new_user_id
+	users_map[new_user.User_id] = new_user
+	return new_user
 }
 
 func GetUserFromMap(users_map map[string]*User, key string) (*User, error) {

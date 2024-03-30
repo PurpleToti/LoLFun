@@ -11,8 +11,8 @@ var UsersMap map[string]*User = make(map[string]*User)
 func createNewUser(c echo.Context) (*User, error) {
 	// fmt.Println("Creating user...")
 
-	new_user, new_user_id := CreateUser(UsersMap)
-	WriteUserCookie(c, new_user_id)
+	new_user := CreateUser(UsersMap)
+	WriteUserCookie(c, new_user.User_id)
 	return new_user, nil
 }
 
