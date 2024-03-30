@@ -4,6 +4,7 @@ import (
 	"LoLFun/gopacs/identification"
 	"LoLFun/gopacs/rooms"
 	"LoLFun/gopacs/userroominteractions"
+	"fmt"
 )
 
 func helloCommand() jsonCommandResponse {
@@ -14,6 +15,7 @@ func helloCommand() jsonCommandResponse {
 }
 
 func meCommand(user *identification.User) jsonCommandResponse {
+	fmt.Println("request received from : " + user.Name)
 	return jsonCommandResponse{
 		to_display: user.Stringify(),
 		details:    "To see how the server sees you...",

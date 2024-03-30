@@ -3,22 +3,21 @@ package view_profileinterface
 import "LoLFun/gopacs/identification"
 import "LoLFun/gopacs/views/htmlboilerplate"
 
-templ head_adds() {
+templ Head_adds() {
     <script src="https://unpkg.com/htmx.org@1.9.11"></script>
 }
 
 templ ProfileSubmitPage(user *identification.User) {
-    @view_htmlboilerplate.HtmlBoilerplate("Home Page", head_adds()) {
+    @view_htmlboilerplate.HtmlBoilerplate("Home Page", Head_adds()) {
         @ProfileSubmitDiv(user)
     }
 }
 
 templ ProfileSubmitDiv(user *identification.User) {
-    <div id="profileSubmitPage">
+    <div id="profileSubmitPage" style="display: flex;">
         <form>
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required />
-            <br />
             <button hx-target="#postResult" hx-post="/user/update" type="submit">Submit</button>
         </form>
         <div id="postResult"></div>
@@ -34,4 +33,12 @@ templ ProfilePostResponse(profile_changed int) {
         default:
             <p>unexpected error while changing profile</p>
     }
+}
+
+templ ProfileDescDiv(user *identification.User) {
+    <div hx-target="#profileDescDiv" hx-swap="outerHTML" hx-get="/user/latest" hx-trigger="every 1s" id="profileDescDiv">
+        <p>
+            { user.Stringify() }
+        </p>
+    </div>
 }
