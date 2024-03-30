@@ -15,6 +15,12 @@ func HandleCommand(c echo.Context, raw_command string, user *identification.User
 		return echoStringResponse(c, meCommand(user))
 	case "meName":
 		return echoStringResponse(c, meNameCommand(user, command_args[1]))
+	case "createRoom":
+		return echoStringResponse(c, createRoomCommand(user))
+	case "meJoinRoom":
+		return echoStringResponse(c, meJoinRoomCommand(user, command_args[1]))
+	case "newUser":
+		return echoStringResponse(c, newUserCommand())
 	}
 
 	return echoStringResponse(c, jsonCommandResponse{

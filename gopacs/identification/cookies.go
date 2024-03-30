@@ -1,27 +1,26 @@
 package identification
 
 import (
-	"errors"
 	"net/http"
 	"time"
 
 	"github.com/labstack/echo/v4"
 )
 
-func WriteCookie(c echo.Context, name string, value string, expires time.Time) error {
+func WriteCookie(c echo.Context, name string, value string, expires time.Time) {
 	cookie := new(http.Cookie)
+	cookie.Path = "/"
 	cookie.Name = name
 	cookie.Value = value
 	cookie.Expires = expires
+	cookie.HttpOnly = true
+	cookie.Secure = false
+	cookie.SameSite = http.SameSiteLaxMode
 	c.SetCookie(cookie)
-	return nil
 }
 
 func WriteUserCookie(c echo.Context, user_id string) error {
-	err := WriteCookie(c, user_cookie_name, user_id, time.Now().Add(user_expire_time))
-	if err != nil {
-		return errors.New("unexpected error while writing user cookie")
-	}
+	WriteCookie(c, user_cookie_name, user_id, time.Now().Add(user_expire_time))
 	return nil
 }
 

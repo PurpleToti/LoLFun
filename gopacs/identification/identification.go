@@ -9,7 +9,7 @@ import (
 func createNewUser(c echo.Context) (*User, error) {
 	// fmt.Println("Creating user...")
 
-	new_user := CreateUser(UsersMap)
+	new_user := CreateUser(Users_map)
 	WriteUserCookie(c, new_user.User_id)
 	return new_user, nil
 }
@@ -32,7 +32,7 @@ func HandleIdentification(c echo.Context) (*User, error) {
 		if err != nil {
 			return createNewUser(c)
 		}
-		user, err := GetUserFromMap(UsersMap, user_id)
+		user, err := GetUserFromMap(Users_map, user_id)
 		if err != nil {
 			return createNewUser(c)
 		}
