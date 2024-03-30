@@ -52,7 +52,7 @@ func CreateRoom(users_map map[string]*Room) *Room {
 
 func cleanRoom(room *Room) {
 	for i := 0; i < users_per_room; i++ {
-		if room.Users_last_interaction[i].Before(time.Now().Add(-user_expire_time)) {
+		if room.Users_last_interaction[i].Before(time.Now().Add(-room_expire_time)) {
 			room.Users_id[i] = ""
 		}
 	}

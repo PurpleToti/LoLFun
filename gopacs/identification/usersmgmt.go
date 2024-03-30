@@ -5,12 +5,13 @@ import "time"
 type UsersCleaner struct {
 	Active    bool
 	Users_map map[string]*User
+	Interval  time.Duration
 }
 
 func (users_cleaner *UsersCleaner) StartCleaning() {
 	for users_cleaner.Active {
 		cleanUsers(users_cleaner.Users_map)
-		time.Sleep(1 * time.Minute)
+		time.Sleep(users_cleaner.Interval)
 	}
 }
 
