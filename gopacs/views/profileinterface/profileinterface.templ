@@ -1,0 +1,37 @@
+package view_profileinterface
+
+import "LoLFun/gopacs/identification"
+import "LoLFun/gopacs/views/htmlboilerplate"
+
+templ head_adds() {
+    <script src="https://unpkg.com/htmx.org@1.9.11"></script>
+}
+
+templ ProfileSubmitPage(user *identification.User) {
+    @view_htmlboilerplate.HtmlBoilerplate("Home Page", head_adds()) {
+        @ProfileSubmitDiv(user)
+    }
+}
+
+templ ProfileSubmitDiv(user *identification.User) {
+    <div id="profileSubmitPage">
+        <form>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required />
+            <br />
+            <button hx-target="#postResult" hx-post="/user/update" type="submit">Submit</button>
+        </form>
+        <p id="postResult"></p>
+    </div>
+}
+
+templ ProfilePostResponse(profile_changed int) {
+    switch profile_changed {
+        case 0:
+            <p>profile succesfully updated</p>
+        case 1:
+            <p>profile name should not be nothing</p>
+        default:
+            <p>unexpected error while changing profile</p>
+    }
+}

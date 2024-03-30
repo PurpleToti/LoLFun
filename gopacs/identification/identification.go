@@ -1,7 +1,6 @@
 package identification
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -10,7 +9,7 @@ import (
 var UsersMap map[string]*User = make(map[string]*User)
 
 func createNewUser(c echo.Context) (*User, error) {
-	fmt.Println("Creating user...")
+	// fmt.Println("Creating user...")
 
 	new_user, new_user_id := CreateUser(UsersMap)
 	WriteUserCookie(c, new_user_id)
@@ -18,7 +17,7 @@ func createNewUser(c echo.Context) (*User, error) {
 }
 
 func refreshUser(c echo.Context, user *User) (*User, error) {
-	fmt.Println("Finding user...")
+	// fmt.Println("Finding user...")
 
 	user.Last_interaction = time.Now()
 	cookie, err := GetUserCookie(c)
