@@ -89,7 +89,7 @@ func ProfileSubmitDiv(user *identification.User) templ.Component {
 			templ_7745c5c3_Var4 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"profileSubmitPage\"><form><label for=\"username\">Username:</label> <input type=\"text\" id=\"username\" name=\"username\" required><br><button hx-target=\"#postResult\" hx-post=\"/user/update\" type=\"submit\">Submit</button></form><p id=\"postResult\"></p></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"profileSubmitPage\"><form><label for=\"username\">Username:</label> <input type=\"text\" id=\"username\" name=\"username\" required><br><button hx-target=\"#postResult\" hx-post=\"/user/update\" type=\"submit\">Submit</button></form><div id=\"postResult\"></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
