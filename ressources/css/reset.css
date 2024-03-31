@@ -46,3 +46,11 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
 }
+button,
+input[type="button"],
+input[type="submit"] {
+    border: none;
+    overflow: visible;
+    outline: none;
+    cursor: pointer;
+}

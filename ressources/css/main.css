@@ -1,0 +1,169 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+body{
+    font-family: "Rubik", sans-serif;
+}
+.header{
+    background-color: var(--orange);
+    padding: 1.5rem 5rem;
+    position: sticky;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: space-around;
+    justify-items: center;
+}
+.header__user{
+    font-size: 3rem;
+    color: white;
+    font-weight: bold;
+    text-shadow: 0px -2px 2px var(--orange-fonce);
+    background-color: var(--orange-profond);
+    padding: 1.2rem 7rem;
+    border-radius: 13px;
+    box-shadow: 0px 5px 0 var(--orange-fonce);
+    transition: all .1s;
+    -webkit-transition: all .1s;
+}
+.header__user:active{
+    transform: translate(0, 5px);
+    -webkit-transform: translate(0, 5px);
+    box-shadow: none;
+}
+.header__room{
+    background-color: var(--orange);
+    font-size: 3rem;
+    color: white;
+    font-weight: bold;
+    padding: 1.2rem 7rem;
+    border-radius: 13px;
+}
+.user__profile{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20%;
+    margin: 3rem 0;
+    padding: 10rem;
+}
+.current__profile{
+    display: grid;
+}
+.profile__title{
+    font-size: 1.4rem;
+    margin-bottom: 2rem;
+    font-weight: 500;
+}
+.profile__username{
+    font-size: 1.1rem;
+}
+.update__profile{
+    display: grid;
+    max-width: 300px;
+}
+.update__title{
+    font-size: 1.4rem;
+    margin-bottom: 3rem;
+    font-weight: 500;
+}
+.update__form{
+    display: grid; 
+}
+.username__input{
+    font-family: "Rubik", sans-serif;
+    font-size: 1rem;
+    border-radius: 14px;
+    border: 3px solid var(--orange);
+    padding: 0.4rem 0.6rem;
+    text-align: center;
+    box-shadow: 0px 1px 0 var(--orange-fonce);
+}
+.username__input:focus{
+    outline: none;
+}
+.username__submit{
+    color: white;
+    background-color: var(--orange);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 12px;
+    box-shadow: 0px 4px 0 var(--orange-moyen);    
+    transition: all .1s;
+    -webkit-transition: all .1s;
+}
+.username__submit:active{
+    transform: translate(0, 4px);
+    -webkit-transform: translate(0, 4px);
+    box-shadow: none;
+}
+
+
+.room__section{
+    display: grid;
+    margin: 3rem 0;
+    padding: 10rem;
+    gap: 10%;
+    grid-template-columns: 1fr 1fr;
+
+}
+.room__title{
+    font-size: 1.4rem;
+    margin-bottom: 3rem;
+    font-weight: 500;
+}
+
+.room__users li{
+    background-color: var(--orange);
+    color: white;
+    text-align: center;
+    width: 15rem;
+    font-size: 1.2rem;
+    padding: 0.8rem 1rem;
+    border-radius: 50px;
+    margin-bottom: 2rem;
+    box-shadow: 0px 5px 0 var(--orange-moyen);
+}
+.chat__box{
+    justify-self: center;
+}
+.chat__messages{
+    background-color: var(--gris);
+    width: 25rem;
+    height: 20rem;
+    border-radius: 20px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+.chat__form{
+    display: grid;
+    justify-items: center;
+    gap: 0;
+}
+.chat__input{
+    background-color: var(--gris);
+    border:none;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    width: 25rem;
+}
+.chat__input:focus{
+    outline: none;
+}
+.chat__submit{
+    color: rgb(0, 0, 0);
+    background-color: var(--gris);
+    font-size: .9rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    box-shadow: 0px 3px 0 var(--gris-profond);
+    width: 10rem;
+    transition: all .1s;
+    -webkit-transition: all .1s;
+}
+.chat__submit:active{
+    transform: translate(0, 3px);
+    -webkit-transform: translate(0, 3px);
+    box-shadow: none;
+}
