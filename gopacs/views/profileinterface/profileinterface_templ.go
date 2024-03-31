@@ -10,7 +10,7 @@ import "context"
 import "io"
 import "bytes"
 
-import "LoLFun/gopacs/identification"
+import ciad "LoLFun/gopacs/clients_interactions_and_data"
 import "LoLFun/gopacs/views/htmlboilerplate"
 
 func Head_adds() templ.Component {
@@ -37,7 +37,7 @@ func Head_adds() templ.Component {
 	})
 }
 
-func UserPage(user *identification.User) templ.Component {
+func UserPage(user *ciad.User) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -84,7 +84,7 @@ func UserPage(user *identification.User) templ.Component {
 	})
 }
 
-func ProfileSubmitPage(user *identification.User) templ.Component {
+func ProfileSubmitPage(user *ciad.User) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -123,7 +123,7 @@ func ProfileSubmitPage(user *identification.User) templ.Component {
 	})
 }
 
-func ProfileSubmitDiv(user *identification.User) templ.Component {
+func ProfileSubmitDiv(user *ciad.User) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -184,7 +184,7 @@ func ProfilePostResponse(profile_changed int) templ.Component {
 	})
 }
 
-func ProfileDescDiv(user *identification.User) templ.Component {
+func ProfileDescDiv(user *ciad.User) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {

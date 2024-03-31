@@ -1,4 +1,4 @@
-package rooms
+package ciad
 
 import (
 	"LoLFun/gopacs/data_utils"
@@ -47,7 +47,7 @@ func emptyUsers_last_interactionArray() [Users_per_room]time.Time {
 
 func getNewRoomId() string {
 	user_id := ""
-	count_copy := rune(count)
+	count_copy := rune(count_room)
 	for {
 		ascii_carac := 65 + (count_copy % 61)
 		if ascii_carac == 92 {
@@ -60,7 +60,7 @@ func getNewRoomId() string {
 			break
 		}
 	}
-	count++
+	count_room++
 	return user_id
 }
 

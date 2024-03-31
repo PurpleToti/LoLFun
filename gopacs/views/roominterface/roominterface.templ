@@ -1,14 +1,13 @@
 package view_roominterface
 
 import "LoLFun/gopacs/views/htmlboilerplate"
-import "LoLFun/gopacs/rooms"
-import "LoLFun/gopacs/identification"
+import ciad "LoLFun/gopacs/clients_interactions_and_data"
 
 templ head_adds() {
     <script src="https://unpkg.com/htmx.org@1.9.11"></script>
 }
 
-templ RoomPage(user *identification.User, room *rooms.Room) {
+templ RoomPage(user *ciad.User, room *ciad.Room) {
     @view_htmlboilerplate.HtmlBoilerplate("Room", head_adds()) {
         @CreateRoomDiv()
         <br />
@@ -25,7 +24,7 @@ templ CreateRoomDiv() {
     </div>
 }
 
-templ CreateRoomDivResponse(room *rooms.Room) {
+templ CreateRoomDivResponse(room *ciad.Room) {
     <p>
         new room created with id : '{ room.Room_id }'
     </p>
@@ -59,7 +58,7 @@ templ JoinRoomDivResponse(room_joined int) {
     }
 }
 
-templ RoomDescDiv(user *identification.User) {
+templ RoomDescDiv(user *ciad.User) {
     <div hx-target="#roomDescDiv" hx-swap="outerHTML" hx-get="/room/latest" hx-trigger="every 1s" id="roomDescDiv">
         Your room:
         if user.Room_id == "" {
@@ -67,7 +66,7 @@ templ RoomDescDiv(user *identification.User) {
                 No room joined!
             </p>
         } else {
-            if room, err := rooms.GetRoomFromMap(rooms.Rooms_map, user.Room_id); err == nil {
+            if room, err := ciad.GetRoomFromMap(ciad.Rooms_map, user.Room_id); err == nil {
                 <p>
                     { room.Stringify() }
                 </p>

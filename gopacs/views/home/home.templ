@@ -1,10 +1,10 @@
 package view_home
 
-import "LoLFun/gopacs/identification"
+import ciad "LoLFun/gopacs/clients_interactions_and_data"
 import "LoLFun/gopacs/views/htmlboilerplate"
 import "LoLFun/gopacs/views/profileinterface"
 
-templ HomePage(user *identification.User) {
+templ HomePage(user *ciad.User) {
     @view_htmlboilerplate.HtmlBoilerplate("Home", view_profileinterface.Head_adds()) {
         @view_profileinterface.ProfileSubmitDiv(user)
         @view_profileinterface.ProfileDescDiv(user)

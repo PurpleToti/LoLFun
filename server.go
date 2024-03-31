@@ -2,9 +2,6 @@ package main
 
 import (
 	"LoLFun/gopacs/command_handler"
-	"LoLFun/gopacs/identification"
-	"LoLFun/gopacs/rooms"
-	"LoLFun/gopacs/userroominteractions"
 	view_commandprompt "LoLFun/gopacs/views/commandprompt"
 	view_profileinterface "LoLFun/gopacs/views/profileinterface"
 	view_roominterface "LoLFun/gopacs/views/roominterface"
@@ -12,6 +9,8 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+
+	ciad "LoLFun/gopacs/clients_interactions_and_data"
 )
 
 func main() {
@@ -40,7 +39,7 @@ func main() {
 }
 
 func userPage(c echo.Context) error {
-	user, err := identification.HandleIdentification(c)
+	user, err := ciad.HandleIdentification(c)
 	if err != nil {
 		return err
 	}
@@ -49,7 +48,7 @@ func userPage(c echo.Context) error {
 }
 
 func latestUserVersion(c echo.Context) error {
-	user, err := identification.HandleIdentification(c)
+	user, err := ciad.HandleIdentification(c)
 	if err != nil {
 		return views_utils.UtilsRender(c, view_profileinterface.ProfilePostResponse(-1))
 	}
@@ -57,7 +56,7 @@ func latestUserVersion(c echo.Context) error {
 }
 
 func updateUser(c echo.Context) error {
-	user, err := identification.HandleIdentification(c)
+	user, err := ciad.HandleIdentification(c)
 	if err != nil {
 		return views_utils.UtilsRender(c, view_profileinterface.ProfilePostResponse(-1))
 	}
@@ -72,12 +71,12 @@ func updateUser(c echo.Context) error {
 }
 
 func roomPage(c echo.Context) error {
-	user, err := identification.HandleIdentification(c)
+	user, err := ciad.HandleIdentification(c)
 	if err != nil {
 		return err
 	}
 
-	room, err := rooms.GetRoomFromMap(rooms.Rooms_map, user.Room_id)
+	room, err := ciad.GetRoomFromMap(ciad.Rooms_map, user.Room_id)
 	if err != nil {
 		room = nil
 	}
@@ -86,23 +85,23 @@ func roomPage(c echo.Context) error {
 }
 
 func newRoom(c echo.Context) error {
-	_, err := identification.HandleIdentification(c)
+	_, err := ciad.HandleIdentification(c)
 	if err != nil {
 		return err
 	}
 
-	room := rooms.CreateRoom(rooms.Rooms_map)
+	room := ciad.CreateRoom(ciad.Rooms_map)
 	return views_utils.UtilsRender(c, view_roominterface.CreateRoomDivResponse(room))
 }
 
 func joinRoom(c echo.Context) error {
-	user, err := identification.HandleIdentification(c)
+	user, err := ciad.HandleIdentification(c)
 	if err != nil {
 		return views_utils.UtilsRender(c, view_roominterface.JoinRoomDivResponse(2))
 	}
 
 	room_id := c.FormValue("room_id")
-	err = userroominteractions.UserJoinRoomId(user, room_id)
+	err = ciad.UserJoinRoomId(user, room_id)
 	if err != nil {
 		return views_utils.UtilsRender(c, view_roominterface.JoinRoomDivResponse(1))
 	}
@@ -111,7 +110,7 @@ func joinRoom(c echo.Context) error {
 }
 
 func latestRoomVersion(c echo.Context) error {
-	user, err := identification.HandleIdentification(c)
+	user, err := ciad.HandleIdentification(c)
 	if err != nil {
 		return err
 	}
@@ -120,7 +119,7 @@ func latestRoomVersion(c echo.Context) error {
 }
 
 func commandPromptPage(c echo.Context) error {
-	_, err := identification.HandleIdentification(c)
+	_, err := ciad.HandleIdentification(c)
 	if err != nil {
 		return err
 	}
@@ -129,7 +128,7 @@ func commandPromptPage(c echo.Context) error {
 }
 
 func commandHandler(c echo.Context) error {
-	user, err := identification.HandleIdentification(c)
+	user, err := ciad.HandleIdentification(c)
 	if err != nil {
 		return err
 	}

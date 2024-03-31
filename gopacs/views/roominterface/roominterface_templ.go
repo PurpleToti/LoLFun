@@ -11,8 +11,7 @@ import "io"
 import "bytes"
 
 import "LoLFun/gopacs/views/htmlboilerplate"
-import "LoLFun/gopacs/rooms"
-import "LoLFun/gopacs/identification"
+import ciad "LoLFun/gopacs/clients_interactions_and_data"
 
 func head_adds() templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
@@ -38,7 +37,7 @@ func head_adds() templ.Component {
 	})
 }
 
-func RoomPage(user *identification.User, room *rooms.Room) templ.Component {
+func RoomPage(user *ciad.User, room *ciad.Room) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -117,7 +116,7 @@ func CreateRoomDiv() templ.Component {
 	})
 }
 
-func CreateRoomDivResponse(room *rooms.Room) templ.Component {
+func CreateRoomDivResponse(room *ciad.Room) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -137,7 +136,7 @@ func CreateRoomDivResponse(room *rooms.Room) templ.Component {
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(room.Room_id)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `gopacs\views\roominterface\roominterface.templ`, Line: 30, Col: 50}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `gopacs\views\roominterface\roominterface.templ`, Line: 29, Col: 50}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
@@ -215,7 +214,7 @@ func JoinRoomDivResponse(room_joined int) templ.Component {
 	})
 }
 
-func RoomDescDiv(user *identification.User) templ.Component {
+func RoomDescDiv(user *ciad.User) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -238,7 +237,7 @@ func RoomDescDiv(user *identification.User) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			if room, err := rooms.GetRoomFromMap(rooms.Rooms_map, user.Room_id); err == nil {
+			if room, err := ciad.GetRoomFromMap(ciad.Rooms_map, user.Room_id); err == nil {
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<p>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -246,7 +245,7 @@ func RoomDescDiv(user *identification.User) templ.Component {
 				var templ_7745c5c3_Var10 string
 				templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(room.Stringify())
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `gopacs\views\roominterface\roominterface.templ`, Line: 72, Col: 38}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `gopacs\views\roominterface\roominterface.templ`, Line: 71, Col: 38}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 				if templ_7745c5c3_Err != nil {

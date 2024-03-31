@@ -1,4 +1,4 @@
-package identification
+package ciad
 
 import (
 	"LoLFun/gopacs/data_utils"
@@ -25,7 +25,7 @@ func (user *User) Stringify() string {
 
 func getNewUserId() string {
 	user_id := ""
-	count_copy := rune(count)
+	count_copy := rune(count_user)
 	for {
 		user_id += string(65 + (count_copy % 61))
 		count_copy /= 61
@@ -33,7 +33,7 @@ func getNewUserId() string {
 			break
 		}
 	}
-	count++
+	count_user++
 	return user_id
 }
 

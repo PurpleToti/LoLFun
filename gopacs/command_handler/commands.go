@@ -1,9 +1,7 @@
 package command_handler
 
 import (
-	"LoLFun/gopacs/identification"
-	"LoLFun/gopacs/rooms"
-	"LoLFun/gopacs/userroominteractions"
+	ciad "LoLFun/gopacs/clients_interactions_and_data"
 	"fmt"
 )
 
@@ -14,7 +12,7 @@ func helloCommand() jsonCommandResponse {
 	}
 }
 
-func meCommand(user *identification.User) jsonCommandResponse {
+func meCommand(user *ciad.User) jsonCommandResponse {
 	fmt.Println("request received from : " + user.Name)
 	return jsonCommandResponse{
 		to_display: user.Stringify(),
@@ -22,7 +20,7 @@ func meCommand(user *identification.User) jsonCommandResponse {
 	}
 }
 
-func meNameCommand(user *identification.User, new_username string) jsonCommandResponse {
+func meNameCommand(user *ciad.User, new_username string) jsonCommandResponse {
 	user.Name = new_username
 	return jsonCommandResponse{
 		to_display: user.Stringify(),
@@ -30,9 +28,9 @@ func meNameCommand(user *identification.User, new_username string) jsonCommandRe
 	}
 }
 
-func createRoomCommand(user *identification.User) jsonCommandResponse {
-	r := rooms.CreateRoom(rooms.Rooms_map)
-	err := userroominteractions.UserJoinRoom(user, r)
+func createRoomCommand(user *ciad.User) jsonCommandResponse {
+	r := ciad.CreateRoom(ciad.Rooms_map)
+	err := ciad.UserJoinRoom(user, r)
 	if err != nil {
 		return jsonCommandResponse{
 			to_display: r.Stringify() + "\nerror joining newly created room",
@@ -45,8 +43,8 @@ func createRoomCommand(user *identification.User) jsonCommandResponse {
 	}
 }
 
-func meJoinRoomCommand(user *identification.User, room_id string) jsonCommandResponse {
-	err := userroominteractions.UserJoinRoomId(user, room_id)
+func meJoinRoomCommand(user *ciad.User, room_id string) jsonCommandResponse {
+	err := ciad.UserJoinRoomId(user, room_id)
 	if err != nil {
 		return jsonCommandResponse{
 			to_display: "Error joining room",
@@ -60,7 +58,7 @@ func meJoinRoomCommand(user *identification.User, room_id string) jsonCommandRes
 }
 
 func newUserCommand() jsonCommandResponse {
-	u := identification.CreateUser(identification.Users_map)
+	u := ciad.CreateUser(ciad.Users_map)
 	return jsonCommandResponse{
 		to_display: u.Stringify(),
 		details:    "A new user has been created",

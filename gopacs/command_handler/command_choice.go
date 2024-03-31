@@ -1,12 +1,12 @@
 package command_handler
 
 import (
-	"LoLFun/gopacs/identification"
+	ciad "LoLFun/gopacs/clients_interactions_and_data"
 
 	"github.com/labstack/echo/v4"
 )
 
-func HandleCommand(c echo.Context, raw_command string, user *identification.User) error {
+func HandleCommand(c echo.Context, raw_command string, user *ciad.User) error {
 	main_command, command_args := splitCommand(raw_command)
 	switch main_command {
 	case "hello":
