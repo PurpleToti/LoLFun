@@ -6,38 +6,39 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func createNewUser(c echo.Context) (*User, error) {
+func _createNewUser(c echo.Context) *User {
 	// fmt.Println("Creating user...")
 
-	new_user := CreateUser(Users_map)
+	new_user := CreateNewUser()
 	WriteUserCookie(c, new_user.User_id)
-	return new_user, nil
+	return new_user
 }
 
-func refreshUser(c echo.Context, user *User) (*User, error) {
+func _refreshUser(c echo.Context, user *User) *User {
 	// fmt.Println("Finding user...")
 
 	user.Last_interaction = time.Now()
-	_, err := GetUserCookie(c)
-	if err != nil {
-		return nil, err
-	}
 	WriteUserCookie(c, user.User_id)
-	return user, nil
+	return user
 }
 
-func HandleIdentification(c echo.Context) (*User, error) {
+func handleIdentification(c echo.Context) *User {
 	if is_there, _ := UserCookieThere(c); is_there {
 		user_id, err := GetUserCookieValue(c)
 		if err != nil {
-			return createNewUser(c)
+			return _createNewUser(c)
 		}
-		user, err := GetUserFromMap(Users_map, user_id)
+		user, err := GetUserById(user_id)
 		if err != nil {
-			return createNewUser(c)
+			return _createNewUser(c)
 		}
-		return refreshUser(c, user)
+		return _refreshUser(c, user)
 	} else {
-		return createNewUser(c)
+		return _createNewUser(c)
 	}
+}
+
+// DEPRECATED
+func HandleIdentification(c echo.Context) *User {
+	return handleIdentification(c)
 }

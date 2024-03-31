@@ -39,27 +39,18 @@ func main() {
 }
 
 func userPage(c echo.Context) error {
-	user, err := ciad.HandleIdentification(c)
-	if err != nil {
-		return err
-	}
+	user := ciad.HandleIdentification(c)
 
 	return views_utils.UtilsRender(c, view_profileinterface.UserPage(user))
 }
 
 func latestUserVersion(c echo.Context) error {
-	user, err := ciad.HandleIdentification(c)
-	if err != nil {
-		return views_utils.UtilsRender(c, view_profileinterface.ProfilePostResponse(-1))
-	}
+	user := ciad.HandleIdentification(c)
 	return views_utils.UtilsRender(c, view_profileinterface.ProfileDescDiv(user))
 }
 
 func updateUser(c echo.Context) error {
-	user, err := ciad.HandleIdentification(c)
-	if err != nil {
-		return views_utils.UtilsRender(c, view_profileinterface.ProfilePostResponse(-1))
-	}
+	user := ciad.HandleIdentification(c)
 
 	new_username := c.FormValue("username")
 	if len(new_username) < 1 {
@@ -71,67 +62,45 @@ func updateUser(c echo.Context) error {
 }
 
 func roomPage(c echo.Context) error {
-	user, err := ciad.HandleIdentification(c)
-	if err != nil {
-		return err
-	}
-
-	room, err := ciad.GetRoomFromMap(ciad.Rooms_map, user.Room_id)
-	if err != nil {
-		room = nil
-	}
-
+	user := ciad.HandleIdentification(c)
+	room := user.Room
 	return views_utils.UtilsRender(c, view_roominterface.RoomPage(user, room))
 }
 
 func newRoom(c echo.Context) error {
-	_, err := ciad.HandleIdentification(c)
-	if err != nil {
-		return err
-	}
+	ciad.HandleIdentification(c)
 
-	room := ciad.CreateRoom(ciad.Rooms_map)
+	room := ciad.CreateNewRoom()
 	return views_utils.UtilsRender(c, view_roominterface.CreateRoomDivResponse(room))
 }
 
 func joinRoom(c echo.Context) error {
-	user, err := ciad.HandleIdentification(c)
-	if err != nil {
-		return views_utils.UtilsRender(c, view_roominterface.JoinRoomDivResponse(2))
-	}
+	user := ciad.HandleIdentification(c)
 
 	room_id := c.FormValue("room_id")
-	err = ciad.UserJoinRoomId(user, room_id)
-	if err != nil {
-		return views_utils.UtilsRender(c, view_roominterface.JoinRoomDivResponse(1))
+	room, ec := ciad.GetRoomById(room_id)
+	if ec != ciad.EC_ok {
+		return views_utils.UtilsRender(c, view_roominterface.JoinRoomDivResponse(ec))
 	}
 
-	return views_utils.UtilsRender(c, view_roominterface.JoinRoomDivResponse(0))
+	ec = user.JoinRoom(room)
+	return views_utils.UtilsRender(c, view_roominterface.JoinRoomDivResponse(ec))
 }
 
 func latestRoomVersion(c echo.Context) error {
-	user, err := ciad.HandleIdentification(c)
-	if err != nil {
-		return err
-	}
+	user := ciad.HandleIdentification(c)
 
 	return views_utils.UtilsRender(c, view_roominterface.RoomDescDiv(user))
 }
 
 func commandPromptPage(c echo.Context) error {
-	_, err := ciad.HandleIdentification(c)
-	if err != nil {
-		return err
-	}
+	ciad.HandleIdentification(c)
 
 	return views_utils.UtilsRender(c, view_commandprompt.AdminCommandPromptPage())
 }
 
 func commandHandler(c echo.Context) error {
-	user, err := ciad.HandleIdentification(c)
-	if err != nil {
-		return err
-	}
+	user := ciad.HandleIdentification(c)
 	var command string = c.Param("command")
 	return command_handler.HandleCommand(c, command, user)
 }

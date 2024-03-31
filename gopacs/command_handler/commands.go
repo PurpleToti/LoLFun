@@ -29,36 +29,43 @@ func meNameCommand(user *ciad.User, new_username string) jsonCommandResponse {
 }
 
 func createRoomCommand(user *ciad.User) jsonCommandResponse {
-	r := ciad.CreateRoom(ciad.Rooms_map)
-	err := ciad.UserJoinRoom(user, r)
-	if err != nil {
+	room, ec := user.CreateAndJoinRoom()
+	if ec != ciad.EC_ok {
 		return jsonCommandResponse{
-			to_display: r.Stringify() + "\nerror joining newly created room",
+			to_display: room.Stringify() + "\nerror joining newly created room",
 			details:    "The room was created but the creator could not join the room succesfully",
 		}
 	}
 	return jsonCommandResponse{
-		to_display: r.Stringify(),
+		to_display: room.Stringify(),
 		details:    "The room was created and the creator joined the room succesfully",
 	}
 }
 
 func meJoinRoomCommand(user *ciad.User, room_id string) jsonCommandResponse {
-	err := ciad.UserJoinRoomId(user, room_id)
-	if err != nil {
+	room, ec := ciad.GetRoomById(room_id)
+	if ec != ciad.EC_ok {
 		return jsonCommandResponse{
 			to_display: "Error joining room",
 			details:    "The room could not be joined by user",
 		}
+	} else {
+		if ec := user.JoinRoom(room); ec == ciad.EC_ok {
+			return jsonCommandResponse{
+				to_display: "Room joined succesfully",
+				details:    "You joined an already existing room",
+			}
+		}
 	}
+
 	return jsonCommandResponse{
-		to_display: "Room joined succesfully",
-		details:    "You joined an already existing room",
+		to_display: "Unexpected error while joining room",
+		details:    "???",
 	}
 }
 
 func newUserCommand() jsonCommandResponse {
-	u := ciad.CreateUser(ciad.Users_map)
+	u := ciad.CreateNewUser()
 	return jsonCommandResponse{
 		to_display: u.Stringify(),
 		details:    "A new user has been created",

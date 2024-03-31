@@ -2,25 +2,31 @@ package ciad
 
 import (
 	"LoLFun/gopacs/data_utils"
-	"errors"
 	"time"
 )
 
 type Room struct {
 	Room_id                string
 	Last_interaction       time.Time
-	Users_id               [Users_per_room]string
-	Users_last_interaction [Users_per_room]time.Time
+	Users                  [users_per_room]*User
+	Users_last_interaction [users_per_room]time.Time
 }
 
 func (room *Room) Stringify() string {
 	repr := "Room{"
 	repr += data_utils.GetFormattedKeyValue("Room_id", room.Room_id, "'") + ","
 	repr += data_utils.GetFormattedKeyValue("Last_interaction", room.Last_interaction.String(), "'") + ","
-	repr += data_utils.GetFormattedList(room.Users_id[:], "'") + ","
+
+	uids_str := make([]string, 0)
+	for i := 0; i < users_per_room; i++ {
+		if room.Users[i] != nil {
+			uids_str = append(uids_str, room.Users[i].User_id)
+		}
+	}
+	repr += data_utils.GetFormattedList(uids_str, "'") + ","
 
 	uli_str := make([]string, 0)
-	for i := 0; i < Users_per_room; i++ {
+	for i := 0; i < users_per_room; i++ {
 		uli_str = append(uli_str, room.Users_last_interaction[i].String())
 	}
 
@@ -29,23 +35,31 @@ func (room *Room) Stringify() string {
 	return repr
 }
 
-func emptyUsers_idArray() [Users_per_room]string {
-	var array [Users_per_room]string
-	for i := 0; i < Users_per_room; i++ {
-		array[i] = ""
+func cleanRoom(room *Room) {
+	for i := 0; i < users_per_room; i++ {
+		if room.Users_last_interaction[i].Before(time.Now().Add(-room_expire_time)) {
+			room.Users[i] = nil
+		}
+	}
+}
+
+func _emptyUsersArray() [users_per_room]*User {
+	var array [users_per_room]*User
+	for i := 0; i < users_per_room; i++ {
+		array[i] = nil
 	}
 	return array
 }
 
-func emptyUsers_last_interactionArray() [Users_per_room]time.Time {
-	var array [Users_per_room]time.Time
-	for i := 0; i < Users_per_room; i++ {
+func _emptyUsers_last_interactionArray() [users_per_room]time.Time {
+	var array [users_per_room]time.Time
+	for i := 0; i < users_per_room; i++ {
 		array[i] = time.Now()
 	}
 	return array
 }
 
-func getNewRoomId() string {
+func _getNewRoomId() string {
 	user_id := ""
 	count_copy := rune(count_room)
 	for {
@@ -64,31 +78,31 @@ func getNewRoomId() string {
 	return user_id
 }
 
-func CreateRoom(users_map map[string]*Room) *Room {
-	new_room_id := getNewRoomId()
+func _addNewRoomToMap(rmap map[string]*Room) *Room {
+	new_room_id := _getNewRoomId()
 	new_room := &Room{
 		Room_id:                new_room_id,
 		Last_interaction:       time.Now(),
-		Users_id:               emptyUsers_idArray(),
-		Users_last_interaction: emptyUsers_last_interactionArray(),
+		Users:                  _emptyUsersArray(),
+		Users_last_interaction: _emptyUsers_last_interactionArray(),
 	}
-	users_map[new_room.Room_id] = new_room
+	rmap[new_room.Room_id] = new_room
 	return new_room
 }
 
-func cleanRoom(room *Room) {
-	for i := 0; i < Users_per_room; i++ {
-		if room.Users_last_interaction[i].Before(time.Now().Add(-room_expire_time)) {
-			room.Users_id[i] = ""
-		}
+func _getRoomFromMap(rmap map[string]*Room, key string) (*Room, ExitCode) {
+	room, ok := rmap[key]
+	if !ok {
+		return nil, EC_room_not_in_map
 	}
+
+	return room, EC_ok
 }
 
-func GetRoomFromMap(Rooms_map map[string]*Room, key string) (*Room, error) {
-	room, ok := Rooms_map[key]
-	if !ok {
-		return nil, errors.New("room id not a key of rooms map provided")
-	}
+func CreateNewRoom() *Room {
+	return _addNewRoomToMap(Rooms_map)
+}
 
-	return room, nil
+func GetRoomById(room_id string) (*Room, ExitCode) {
+	return _getRoomFromMap(Rooms_map, room_id)
 }

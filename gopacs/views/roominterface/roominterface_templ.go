@@ -177,7 +177,7 @@ func JoinRoomDiv() templ.Component {
 	})
 }
 
-func JoinRoomDivResponse(room_joined int) templ.Component {
+func JoinRoomDivResponse(ec ciad.ExitCode) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -190,18 +190,23 @@ func JoinRoomDivResponse(room_joined int) templ.Component {
 			templ_7745c5c3_Var8 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		switch room_joined {
-		case 0:
+		switch ec {
+		case ciad.EC_ok:
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<p>room joined\r</p>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-		case 1:
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<p>room could not be joined\r</p>")
+		case ciad.EC_already_in_room:
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<p>already in room!\r</p>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-		case 2:
+		case ciad.EC_room_full:
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<p>room is full!\r</p>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		default:
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<p>unexpected error\r</p>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -231,35 +236,28 @@ func RoomDescDiv(user *ciad.User) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if user.Room_id == "" {
+		if user.Room == nil {
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<p>No room joined!\r</p>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			if room, err := ciad.GetRoomFromMap(ciad.Rooms_map, user.Room_id); err == nil {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<p>")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				var templ_7745c5c3_Var10 string
-				templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(room.Stringify())
-				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `gopacs\views\roominterface\roominterface.templ`, Line: 71, Col: 38}
-				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p>")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-			} else {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<p>Unexpected error\r</p>")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<p>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var10 string
+			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(user.Room.Stringify())
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `gopacs\views\roominterface\roominterface.templ`, Line: 74, Col: 39}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
 			}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")

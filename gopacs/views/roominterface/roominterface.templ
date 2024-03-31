@@ -41,17 +41,21 @@ templ JoinRoomDiv() {
     </div>
 }
 
-templ JoinRoomDivResponse(room_joined int) {
-    switch room_joined {
-        case 0:
+templ JoinRoomDivResponse(ec ciad.ExitCode) {
+    switch ec {
+        case ciad.EC_ok:
             <p>
                 room joined
             </p>
-        case 1:
+        case ciad.EC_already_in_room:
             <p>
-                room could not be joined
+                already in room!
             </p>
-        case 2:
+        case ciad.EC_room_full:
+            <p>
+                room is full!
+            </p>
+        default:
             <p>
                 unexpected error
             </p>
@@ -61,20 +65,14 @@ templ JoinRoomDivResponse(room_joined int) {
 templ RoomDescDiv(user *ciad.User) {
     <div hx-target="#roomDescDiv" hx-swap="outerHTML" hx-get="/room/latest" hx-trigger="every 1s" id="roomDescDiv">
         Your room:
-        if user.Room_id == "" {
+        if user.Room == nil {
             <p>
                 No room joined!
             </p>
         } else {
-            if room, err := ciad.GetRoomFromMap(ciad.Rooms_map, user.Room_id); err == nil {
-                <p>
-                    { room.Stringify() }
-                </p>
-            } else {
-                <p>
-                    Unexpected error
-                </p>
-            }
+            <p>
+                { user.Room.Stringify() }
+            </p>
         }
     </div>
 }
