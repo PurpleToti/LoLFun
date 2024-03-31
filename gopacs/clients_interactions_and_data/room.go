@@ -36,14 +36,6 @@ func (room *Room) Stringify() string {
 	return repr
 }
 
-func cleanRoom(room *Room) {
-	for i := 0; i < users_per_room; i++ {
-		if room.Users_last_interaction[i].Before(time.Now().Add(-room_expire_time)) {
-			room.Users[i] = nil
-		}
-	}
-}
-
 func _emptyUsersArray() [users_per_room]*User {
 	var array [users_per_room]*User
 	for i := 0; i < users_per_room; i++ {

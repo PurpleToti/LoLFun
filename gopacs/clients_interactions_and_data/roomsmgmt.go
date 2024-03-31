@@ -3,15 +3,23 @@ package ciad
 import "time"
 
 type RoomsCleaner struct {
-	Active    bool
-	Rooms_map map[string]*Room
-	Interval  time.Duration
+	Active   bool
+	Rmap     map[string]*Room
+	Interval time.Duration
 }
 
 func (rooms_cleaner *RoomsCleaner) StartCleaning() {
 	for rooms_cleaner.Active {
-		cleanRooms(rooms_cleaner.Rooms_map)
+		cleanRooms(rooms_cleaner.Rmap)
 		time.Sleep(rooms_cleaner.Interval)
+	}
+}
+
+func cleanRoom(room *Room) {
+	for i := 0; i < users_per_room; i++ {
+		if room.Users_last_interaction[i].Before(time.Now().Add(-room_expire_time)) {
+			room.Users[i] = nil
+		}
 	}
 }
 
