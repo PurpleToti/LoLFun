@@ -20,3 +20,12 @@ func (room *Room) addUser(user *User) ExitCode {
 
 	return EC_ok
 }
+
+func (room *Room) getUserPosition(user *User) (int, ExitCode) {
+	for i := 0; i < users_per_room; i++ {
+		if room.Users[i] == user {
+			return i, EC_ok
+		}
+	}
+	return -1, EC_user_not_in_room
+}

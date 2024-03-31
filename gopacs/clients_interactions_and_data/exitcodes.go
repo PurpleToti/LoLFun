@@ -15,5 +15,7 @@ const (
 	EC_room_created
 	EC_no_room_created
 
+	EC_user_not_in_room
+
 	EC_room_not_in_map
 )
