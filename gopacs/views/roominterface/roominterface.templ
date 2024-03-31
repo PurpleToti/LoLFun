@@ -1,0 +1,81 @@
+package view_roominterface
+
+import "LoLFun/gopacs/views/htmlboilerplate"
+import "LoLFun/gopacs/rooms"
+import "LoLFun/gopacs/identification"
+
+templ head_adds() {
+    <script src="https://unpkg.com/htmx.org@1.9.11"></script>
+}
+
+templ RoomPage(user *identification.User, room *rooms.Room) {
+    @view_htmlboilerplate.HtmlBoilerplate("Room", head_adds()) {
+        @CreateRoomDiv()
+        <br />
+        @JoinRoomDiv()
+        <br />
+        @RoomDescDiv(user)
+    }
+}
+
+templ CreateRoomDiv() {
+    <div id="createRoomDiv" style="display: flex;">
+        <button hx-get="/room/new" hx-target="#createRoomDivResponse" hx-trigger="click">Create room</button>
+        <div id="createRoomDivResponse"></div>
+    </div>
+}
+
+templ CreateRoomDivResponse(room *rooms.Room) {
+    <p>
+        new room created with id : '{ room.Room_id }'
+    </p>
+}
+
+templ JoinRoomDiv() {
+    <div id="joinRoomDiv" style="display: flex;">
+        <form>
+            <label for="room_id">Room id:</label>
+            <input type="text" id="room_id" name="room_id" required />
+            <button hx-target="#joinRoomDivPostResult" hx-post="/room/join" type="submit">Submit</button>
+        </form>
+        <div id="joinRoomDivPostResult"></div>
+    </div>
+}
+
+templ JoinRoomDivResponse(room_joined int) {
+    switch room_joined {
+        case 0:
+            <p>
+                room joined
+            </p>
+        case 1:
+            <p>
+                room could not be joined
+            </p>
+        case 2:
+            <p>
+                unexpected error
+            </p>
+    }
+}
+
+templ RoomDescDiv(user *identification.User) {
+    <div hx-target="#roomDescDiv" hx-swap="outerHTML" hx-get="/room/latest" hx-trigger="every 1s" id="roomDescDiv">
+        Your room:
+        if user.Room_id == "" {
+            <p>
+                No room joined!
+            </p>
+        } else {
+            if room, err := rooms.GetRoomFromMap(rooms.Rooms_map, user.Room_id); err == nil {
+                <p>
+                    { room.Stringify() }
+                </p>
+            } else {
+                <p>
+                    Unexpected error
+                </p>
+            }
+        }
+    </div>
+}

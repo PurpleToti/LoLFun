@@ -7,6 +7,13 @@ templ Head_adds() {
     <script src="https://unpkg.com/htmx.org@1.9.11"></script>
 }
 
+templ UserPage(user *identification.User) {
+    @view_htmlboilerplate.HtmlBoilerplate("Home", Head_adds()) {
+        @ProfileSubmitDiv(user)
+        @ProfileDescDiv(user)
+    }
+}
+
 templ ProfileSubmitPage(user *identification.User) {
     @view_htmlboilerplate.HtmlBoilerplate("Home Page", Head_adds()) {
         @ProfileSubmitDiv(user)

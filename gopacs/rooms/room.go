@@ -87,7 +87,7 @@ func cleanRoom(room *Room) {
 func GetRoomFromMap(Rooms_map map[string]*Room, key string) (*Room, error) {
 	room, ok := Rooms_map[key]
 	if !ok {
-		return nil, errors.New("user id not a key of users map provided")
+		return nil, errors.New("room id not a key of rooms map provided")
 	}
 
 	return room, nil

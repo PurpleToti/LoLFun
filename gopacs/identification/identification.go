@@ -18,11 +18,11 @@ func refreshUser(c echo.Context, user *User) (*User, error) {
 	// fmt.Println("Finding user...")
 
 	user.Last_interaction = time.Now()
-	cookie, err := GetUserCookie(c)
+	_, err := GetUserCookie(c)
 	if err != nil {
 		return nil, err
 	}
-	cookie.Expires = time.Now().Add(5 * time.Minute)
+	WriteUserCookie(c, user.User_id)
 	return user, nil
 }
 
