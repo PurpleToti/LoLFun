@@ -31,6 +31,8 @@ func main() {
 	e.GET("/room/new", newRoom)
 	e.POST("/room/join", joinRoom)
 	e.GET("/room/latest", latestRoomVersion)
+	e.GET("/room/chat", retrieveChatBox)
+	e.POST("/room/send/", sendRoomMessage)
 
 	e.GET("/commandprompt", commandPromptPage)
 	e.GET("/handlecommand/:command", commandHandler)
@@ -89,6 +91,18 @@ func latestRoomVersion(c echo.Context) error {
 	lolfunctx := ciad.NewLoLFunContext(c)
 
 	return views_utils.UtilsRender(c, view_roominterface.RoomDescDiv(lolfunctx.ContextUser))
+}
+
+func retrieveChatBox(c echo.Context) error {
+	lolfunctx := ciad.NewLoLFunContext(c)
+	return views_utils.UtilsRender(c, view_roominterface.RoomChatDiv(lolfunctx.UserRoom))
+}
+
+func sendRoomMessage(c echo.Context) error {
+	lolfunctx := ciad.NewLoLFunContext(c)
+	message := c.FormValue("message")
+	ec := lolfunctx.ContextUser.SendMessageToRoom(message)
+	return views_utils.UtilsRender(c, view_roominterface.NewRoomMessageDivResponse(ec))
 }
 
 func commandPromptPage(c echo.Context) error {

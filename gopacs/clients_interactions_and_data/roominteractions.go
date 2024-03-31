@@ -29,3 +29,7 @@ func (room *Room) getUserPosition(user *User) (int, ExitCode) {
 	}
 	return -1, EC_user_not_in_room
 }
+
+func (room *Room) addMessage(message string, user *User) {
+	room.Chat = append(room.Chat, user.Name+" : "+message+"\n\n")
+}

@@ -10,6 +10,7 @@ type Room struct {
 	Last_interaction       time.Time
 	Users                  [users_per_room]*User
 	Users_last_interaction [users_per_room]time.Time
+	Chat                   []string
 }
 
 func (room *Room) Stringify() string {
@@ -85,6 +86,7 @@ func _addNewRoomToMap(rmap map[string]*Room) *Room {
 		Last_interaction:       time.Now(),
 		Users:                  _emptyUsersArray(),
 		Users_last_interaction: _emptyUsers_last_interactionArray(),
+		Chat:                   make([]string, 0),
 	}
 	rmap[new_room.Room_id] = new_room
 	return new_room

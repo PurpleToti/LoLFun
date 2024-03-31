@@ -24,3 +24,11 @@ func (user *User) JoinRoom(room *Room) ExitCode {
 		return EC_unexpected
 	}
 }
+
+func (user *User) SendMessageToRoom(message string) ExitCode {
+	if user.Room == nil {
+		return EC_user_not_in_room
+	}
+	user.Room.addMessage(message, user)
+	return EC_ok
+}

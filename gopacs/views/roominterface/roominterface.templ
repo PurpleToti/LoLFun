@@ -14,6 +14,10 @@ templ RoomPage(user *ciad.User, room *ciad.Room) {
         @JoinRoomDiv()
         <br />
         @RoomDescDiv(user)
+        <br />
+        @NewRoomMessageDiv()
+        <br />
+        @RoomChatDiv(room)
     }
 }
 
@@ -74,5 +78,39 @@ templ RoomDescDiv(user *ciad.User) {
                 { user.Room.Stringify() }
             </p>
         }
+    </div>
+}
+
+templ NewRoomMessageDiv() {
+    <div id="newRoomMessage" style="display: flex;">
+        <form>
+            <label for="message">Message:</label>
+            <input type="text" id="message" name="message" required />
+            <button hx-target="#newRoomMessagePostResult" hx-post="/room/send/" type="submit">Submit</button>
+        </form>
+        <div id="newRoomMessagePostResult"></div>
+    </div>
+}
+
+templ NewRoomMessageDivResponse(ec ciad.ExitCode) {
+    <p>
+    switch ec {
+        case ciad.EC_ok:
+            message sent!
+        default:
+            message not sent
+    }
+    </p>
+}
+
+templ RoomChatDiv(room *ciad.Room) {
+    <div hx-target="#roomChatdiv" hx-swap="outerHTML" hx-get="/room/chat" hx-trigger="every 1s" id="roomChatdiv">
+    if room != nil {
+        for i := 0; i < len(room.Chat); i++ {
+            <p>
+                { room.Chat[i] }
+            </p>
+        }
+    } 
     </div>
 }
