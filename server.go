@@ -1,11 +1,11 @@
 package main
 
 import (
-	"LoLFun/gopacs/command_handler"
-	view_commandprompt "LoLFun/gopacs/views/commandprompt"
-	view_profileinterface "LoLFun/gopacs/views/profileinterface"
-	view_roominterface "LoLFun/gopacs/views/roominterface"
+	view_room "LoLFun/gopacs/views/room"
+	view_user "LoLFun/gopacs/views/user"
 	"LoLFun/gopacs/views_utils"
+	"fmt"
+	"net/http"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -23,11 +23,13 @@ func main() {
 	}))
 	e.Static("/ressources", "ressources")
 
-	e.GET("/user", userPage)
+	e.GET("/", testPage)
+
+	e.GET("/user", userContent)
 	e.GET("/user/latest", latestUserVersion)
 	e.POST("/user/update", updateUser)
 
-	e.GET("/room", roomPage)
+	e.GET("/room", roomContent)
 	e.GET("/room/new", newRoom)
 	e.POST("/room/join", joinRoom)
 	e.GET("/room/latest", latestRoomVersion)
@@ -40,78 +42,93 @@ func main() {
 	e.Logger.Fatal(e.Start("192.168.1.56:8080"))
 }
 
-func userPage(c echo.Context) error {
+func testPage(c echo.Context) error {
 	lolfunctx := ciad.NewLoLFunContext(c)
-	return views_utils.UtilsRender(c, view_profileinterface.UserPage(lolfunctx.ContextUser))
+	return views_utils.UtilsRender(c, view_user.UserPage(lolfunctx))
+}
+
+func userContent(c echo.Context) error {
+	lolfunctx := ciad.NewLoLFunContext(c)
+	return views_utils.UtilsRender(c, view_user.UserContent(lolfunctx))
 }
 
 func latestUserVersion(c echo.Context) error {
 	lolfunctx := ciad.NewLoLFunContext(c)
-	return views_utils.UtilsRender(c, view_profileinterface.ProfileDescDiv(lolfunctx.ContextUser))
+	return views_utils.UtilsRender(c, view_user.UserDescription(lolfunctx.ContextUser))
 }
 
 func updateUser(c echo.Context) error {
 	lolfunctx := ciad.NewLoLFunContext(c)
 
 	new_username := c.FormValue("username")
-	if len(new_username) < 1 {
-		return views_utils.UtilsRender(c, view_profileinterface.ProfilePostResponse(1))
-	}
-
-	lolfunctx.ContextUser.Name = new_username
-	return views_utils.UtilsRender(c, view_profileinterface.ProfilePostResponse(0))
+	ec := lolfunctx.ContextUser.ChangeName(new_username)
+	return views_utils.UtilsRender(c, view_user.UserSettingsUpdateResponse(ec))
 }
 
-func roomPage(c echo.Context) error {
+func roomContent(c echo.Context) error {
 	lolfunctx := ciad.NewLoLFunContext(c)
-	return views_utils.UtilsRender(c, view_roominterface.RoomPage(lolfunctx.ContextUser, lolfunctx.UserRoom))
+	return views_utils.UtilsRender(c, view_room.RoomContent(lolfunctx))
 }
 
 func newRoom(c echo.Context) error {
-	ciad.NewLoLFunContext(c)
-
-	room := ciad.CreateNewRoom()
-	return views_utils.UtilsRender(c, view_roominterface.CreateRoomDivResponse(room))
+	lolfunctx := ciad.NewLoLFunContext(c)
+	_, ec := lolfunctx.ContextUser.CreateAndJoinRoom()
+	return views_utils.UtilsRender(c, view_room.RoomManagementNewRoomResponse(ec))
 }
 
 func joinRoom(c echo.Context) error {
 	lolfunctx := ciad.NewLoLFunContext(c)
+	fmt.Println(lolfunctx.ContextUser.Name)
+	return c.String(http.StatusOK, "OK")
 
-	room_id := c.FormValue("room_id")
-	room, ec := ciad.GetRoomById(room_id)
-	if ec != ciad.EC_ok {
-		return views_utils.UtilsRender(c, view_roominterface.JoinRoomDivResponse(ec))
-	}
-
-	ec = lolfunctx.ContextUser.JoinRoom(room)
-	return views_utils.UtilsRender(c, view_roominterface.JoinRoomDivResponse(ec))
+	//room_id := c.FormValue("room_id")
+	//room, ec := ciad.GetRoomById(room_id)
+	//if ec != ciad.EC_ok {
+	//	return views_utils.UtilsRender(c, view_roominterface.JoinRoomDivResponse(ec))
+	//}
+	//
+	//ec = lolfunctx.ContextUser.JoinRoom(room)
+	//return views_utils.UtilsRender(c, view_roominterface.JoinRoomDivResponse(ec))
 }
 
 func latestRoomVersion(c echo.Context) error {
 	lolfunctx := ciad.NewLoLFunContext(c)
+	fmt.Println(lolfunctx.ContextUser.Name)
+	return c.String(http.StatusOK, "OK")
 
-	return views_utils.UtilsRender(c, view_roominterface.RoomDescDiv(lolfunctx.ContextUser))
+	//return views_utils.UtilsRender(c, view_roominterface.RoomDescDiv(lolfunctx.ContextUser))
 }
 
 func retrieveChatBox(c echo.Context) error {
 	lolfunctx := ciad.NewLoLFunContext(c)
-	return views_utils.UtilsRender(c, view_roominterface.RoomChatDiv(lolfunctx.UserRoom))
+	fmt.Println(lolfunctx.ContextUser.Name)
+	return c.String(http.StatusOK, "OK")
+	//return views_utils.UtilsRender(c, view_roominterface.RoomChatDiv(lolfunctx.UserRoom))
 }
 
 func sendRoomMessage(c echo.Context) error {
 	lolfunctx := ciad.NewLoLFunContext(c)
-	message := c.FormValue("message")
-	ec := lolfunctx.ContextUser.SendMessageToRoom(message)
-	return views_utils.UtilsRender(c, view_roominterface.NewRoomMessageDivResponse(ec))
+	fmt.Println(lolfunctx.ContextUser.Name)
+	return c.String(http.StatusOK, "OK")
+
+	//message := c.FormValue("message")
+	//ec := lolfunctx.ContextUser.SendMessageToRoom(message)
+	//return views_utils.UtilsRender(c, view_roominterface.NewRoomMessageDivResponse(ec))
 }
 
 func commandPromptPage(c echo.Context) error {
-	ciad.NewLoLFunContext(c)
-	return views_utils.UtilsRender(c, view_commandprompt.AdminCommandPromptPage())
+	lolfunctx := ciad.NewLoLFunContext(c)
+	fmt.Println(lolfunctx.ContextUser.Name)
+	return c.String(http.StatusOK, "OK")
+	//
+	//return views_utils.UtilsRender(c, view_commandprompt.AdminCommandPromptPage())
 }
 
 func commandHandler(c echo.Context) error {
 	lolfunctx := ciad.NewLoLFunContext(c)
-	var command string = c.Param("command")
-	return command_handler.HandleCommand(c, command, lolfunctx.ContextUser)
+	fmt.Println(lolfunctx.ContextUser.Name)
+	return c.String(http.StatusOK, "OK")
+
+	//var command string = c.Param("command")
+	//return command_handler.HandleCommand(c, command, lolfunctx.ContextUser)
 }

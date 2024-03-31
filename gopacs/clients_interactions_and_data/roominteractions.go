@@ -2,7 +2,7 @@ package ciad
 
 func (room *Room) addUser(user *User) ExitCode {
 	var room_pos int = -1
-	for i := 0; i < users_per_room; i++ {
+	for i := 0; i < Users_per_room; i++ {
 		if room.Users[i] == nil {
 			room_pos = i
 		}
@@ -22,7 +22,7 @@ func (room *Room) addUser(user *User) ExitCode {
 }
 
 func (room *Room) getUserPosition(user *User) (int, ExitCode) {
-	for i := 0; i < users_per_room; i++ {
+	for i := 0; i < Users_per_room; i++ {
 		if room.Users[i] == user {
 			return i, EC_ok
 		}

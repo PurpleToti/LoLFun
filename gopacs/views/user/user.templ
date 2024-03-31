@@ -1,0 +1,49 @@
+package view_user
+
+import "LoLFun/gopacs/views/htmlboilerplate"
+import "LoLFun/gopacs/clients_interactions_and_data"
+
+templ UserPage(lolfunctx *ciad.LoLFunContext) {
+    @view_htmlboilerplate.BasePage() {
+        @UserContent(lolfunctx)
+    }
+}
+
+templ UserContent(lolfunctx *ciad.LoLFunContext) {
+    <section class="user__profile">
+        @UserDescription(lolfunctx.ContextUser)
+        @UserSettings()
+    </section>
+}
+
+templ UserDescription(user *ciad.User) {
+    <section id="userDescriptionSection" class="current__profile" hx-get="/user/latest" hx-trigger="every 1s" hx-swap="outerHTML">
+        <h2 class="profile__title">Current profile :</h2>
+        <p class="profile__username">Username : { user.Name }</p>
+    </section>
+}
+
+templ UserSettings() {
+    <section id="userSettingsSection" class="update__profile">
+        <form class="update__form">
+            <label class="update__title" for="username">Setup a new username :</label>
+            <input type="text" id="username" class="username__input" name="username" placeholder="Enter your username" required />
+            <br />
+            <input hx-target="#userSettingsSectionPostResultDiv" hx-post="/user/update" type="submit" class="username__submit" />
+        </form>
+        <div id="userSettingsSectionPostResultDiv"></div>
+    </section>
+}
+
+templ UserSettingsUpdateResponse(ca ciad.ExitCode) {
+    <p>
+        switch ca {
+            case ciad.EC_ok:
+                User profile updated succesfully!
+            case ciad.EC_bad_username:
+                Username is not valid!
+            default:
+                Unexpected behaviour...
+        }
+    </p>
+}

@@ -8,8 +8,8 @@ import (
 type Room struct {
 	Room_id                string
 	Last_interaction       time.Time
-	Users                  [users_per_room]*User
-	Users_last_interaction [users_per_room]time.Time
+	Users                  [Users_per_room]*User
+	Users_last_interaction [Users_per_room]time.Time
 	Chat                   []string
 }
 
@@ -19,7 +19,7 @@ func (room *Room) Stringify() string {
 	repr += data_utils.GetFormattedKeyValue("Last_interaction", room.Last_interaction.String(), "'") + ","
 
 	uids_str := make([]string, 0)
-	for i := 0; i < users_per_room; i++ {
+	for i := 0; i < Users_per_room; i++ {
 		if room.Users[i] != nil {
 			uids_str = append(uids_str, room.Users[i].User_id)
 		}
@@ -27,7 +27,7 @@ func (room *Room) Stringify() string {
 	repr += data_utils.GetFormattedList(uids_str, "'") + ","
 
 	uli_str := make([]string, 0)
-	for i := 0; i < users_per_room; i++ {
+	for i := 0; i < Users_per_room; i++ {
 		uli_str = append(uli_str, room.Users_last_interaction[i].String())
 	}
 
@@ -36,17 +36,17 @@ func (room *Room) Stringify() string {
 	return repr
 }
 
-func _emptyUsersArray() [users_per_room]*User {
-	var array [users_per_room]*User
-	for i := 0; i < users_per_room; i++ {
+func _emptyUsersArray() [Users_per_room]*User {
+	var array [Users_per_room]*User
+	for i := 0; i < Users_per_room; i++ {
 		array[i] = nil
 	}
 	return array
 }
 
-func _emptyUsers_last_interactionArray() [users_per_room]time.Time {
-	var array [users_per_room]time.Time
-	for i := 0; i < users_per_room; i++ {
+func _emptyUsers_last_interactionArray() [Users_per_room]time.Time {
+	var array [Users_per_room]time.Time
+	for i := 0; i < Users_per_room; i++ {
 		array[i] = time.Now()
 	}
 	return array

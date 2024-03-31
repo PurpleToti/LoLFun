@@ -1,0 +1,8 @@
+package view_navigation
+
+templ NavigationBar() {
+    <div id="navigationBar" class="header">
+        <button hx-target="#baseMainContent" hx-get="/user" id="navigationUserButton" class="header__user">USER</button>
+        <button hx-target="#baseMainContent" hx-get="/room" id="navigationRoomButton" class="header__room">ROOM</button>
+    </div>
+}

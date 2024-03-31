@@ -2,7 +2,7 @@ package ciad
 
 import "time"
 
-const users_per_room int = 5
+const Users_per_room int = 5
 
 var count_room uint = 0
 var count_user uint = 0

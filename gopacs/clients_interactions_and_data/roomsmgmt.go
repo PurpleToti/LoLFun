@@ -16,7 +16,7 @@ func (rooms_cleaner *RoomsCleaner) StartCleaning() {
 }
 
 func cleanRoom(room *Room) {
-	for i := 0; i < users_per_room; i++ {
+	for i := 0; i < Users_per_room; i++ {
 		if room.Users_last_interaction[i].Before(time.Now().Add(-room_expire_time)) {
 			room.Users[i] = nil
 		}

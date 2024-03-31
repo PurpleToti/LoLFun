@@ -32,3 +32,12 @@ func (user *User) SendMessageToRoom(message string) ExitCode {
 	user.Room.addMessage(message, user)
 	return EC_ok
 }
+
+func (user *User) ChangeName(new_name string) ExitCode {
+	if len(new_name) < 1 {
+		return EC_bad_username
+	}
+
+	user.Name = new_name
+	return EC_ok
+}

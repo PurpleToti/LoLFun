@@ -1,0 +1,70 @@
+package view_room
+
+import "LoLFun/gopacs/views/htmlboilerplate"
+import "LoLFun/gopacs/clients_interactions_and_data"
+
+templ RoomPage(lolfunctx *ciad.LoLFunContext) {
+    @view_htmlboilerplate.BasePage() {
+        @RoomContent(lolfunctx)
+    }
+}
+
+templ RoomContent(lolfunctx *ciad.LoLFunContext) {
+    <section class="room__section">
+        if lolfunctx.UserRoom != nil {
+            @UsersList(lolfunctx.UserRoom)
+            @RoomChat()
+        } else {
+            @RoomManagement()
+        }
+    </section>
+}
+
+templ UsersList(room *ciad.Room) {
+    if room != nil {
+    <div>
+        <h2 class="room__title">Users in the room :</h2>
+        <ul class="room__users">
+        for i := 0; i < ciad.Users_per_room; i++ {
+            if room.Users[i] != nil {
+                <li>
+                    { room.Users[i].Name }
+                </li>
+            }
+        }
+        </ul>
+    </div>
+    }
+}
+
+templ RoomChat() {
+    <section class="chat__box">
+        <section class="chat__messages" id="chat__messages">
+            <!-- Messages ici -->
+        </section>
+        <form method="post" class="chat__form">
+            <input type="text" name="text_chat" class="chat__input" />
+            <br />
+            <input type="submit" value="SUBMIT" class="chat__submit" />
+        </form>
+    </section>
+}
+
+templ RoomManagement() {
+    <div id="roomGenerationDiv">
+        <button hx-target="#roomGenerationDivGetResponse" hx-get="/room/new">CREATE YOUR ROOM!</button>
+        <div id="roomGenerationDivGetResponse"></div>
+    </div>
+}
+
+templ RoomManagementNewRoomResponse(ec ciad.ExitCode) {
+    <p>
+        switch ec {
+            case ciad.EC_ok:
+                <div hx-target="#baseMainContent" hx-get="/room" hx-trigger="load"></div>
+                Room created and joined succesfully
+            default:
+                Unexpected behaviour
+        }
+    </p>
+}

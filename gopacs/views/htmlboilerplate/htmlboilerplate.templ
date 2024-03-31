@@ -1,12 +1,16 @@
 package view_htmlboilerplate
 
+import "LoLFun/gopacs/views/navigation"
+
 templ HtmlBoilerplate(title string, head_adds ...templ.Component) {
     <!DOCTYPE html>
     <html lang="en">
         <head>
             <meta charset="UTF-8" />
-            <title>{ title }</title>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
             <meta name="viewport" content="width=device-width,initial-scale=1" />
+            <script src="https://unpkg.com/htmx.org@1.9.11"></script>
+            <title>{ title }</title>
             <link rel="stylesheet" type="text/css" href="/ressources/css/reset.css"/>
             if len(head_adds) != 0 {
                 @head_adds[0]
@@ -16,4 +20,18 @@ templ HtmlBoilerplate(title string, head_adds ...templ.Component) {
             { children... }
         </body>
     </html>
+}
+
+templ basePageHeadAdds() {
+    <link rel="stylesheet" type="text/css" href="/ressources/css/colors.css"/>
+    <link rel="stylesheet" type="text/css" href="/ressources/css/main.css"/>
+}
+
+templ BasePage() {
+    @HtmlBoilerplate("LoLFun", basePageHeadAdds()) {
+        @view_navigation.NavigationBar()
+        <div id="baseMainContent">
+            { children... }
+        </div>
+    }
 }
