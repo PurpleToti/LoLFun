@@ -1,4 +1,4 @@
-package rooms
+package ciad
 
 import "time"
 

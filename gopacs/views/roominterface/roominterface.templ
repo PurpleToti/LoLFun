@@ -1,0 +1,78 @@
+package view_roominterface
+
+import "LoLFun/gopacs/views/htmlboilerplate"
+import ciad "LoLFun/gopacs/clients_interactions_and_data"
+
+templ head_adds() {
+    <script src="https://unpkg.com/htmx.org@1.9.11"></script>
+}
+
+templ RoomPage(user *ciad.User, room *ciad.Room) {
+    @view_htmlboilerplate.HtmlBoilerplate("Room", head_adds()) {
+        @CreateRoomDiv()
+        <br />
+        @JoinRoomDiv()
+        <br />
+        @RoomDescDiv(user)
+    }
+}
+
+templ CreateRoomDiv() {
+    <div id="createRoomDiv" style="display: flex;">
+        <button hx-get="/room/new" hx-target="#createRoomDivResponse" hx-trigger="click">Create room</button>
+        <div id="createRoomDivResponse"></div>
+    </div>
+}
+
+templ CreateRoomDivResponse(room *ciad.Room) {
+    <p>
+        new room created with id : '{ room.Room_id }'
+    </p>
+}
+
+templ JoinRoomDiv() {
+    <div id="joinRoomDiv" style="display: flex;">
+        <form>
+            <label for="room_id">Room id:</label>
+            <input type="text" id="room_id" name="room_id" required />
+            <button hx-target="#joinRoomDivPostResult" hx-post="/room/join" type="submit">Submit</button>
+        </form>
+        <div id="joinRoomDivPostResult"></div>
+    </div>
+}
+
+templ JoinRoomDivResponse(ec ciad.ExitCode) {
+    switch ec {
+        case ciad.EC_ok:
+            <p>
+                room joined
+            </p>
+        case ciad.EC_already_in_room:
+            <p>
+                already in room!
+            </p>
+        case ciad.EC_room_full:
+            <p>
+                room is full!
+            </p>
+        default:
+            <p>
+                unexpected error
+            </p>
+    }
+}
+
+templ RoomDescDiv(user *ciad.User) {
+    <div hx-target="#roomDescDiv" hx-swap="outerHTML" hx-get="/room/latest" hx-trigger="every 1s" id="roomDescDiv">
+        Your room:
+        if user.Room == nil {
+            <p>
+                No room joined!
+            </p>
+        } else {
+            <p>
+                { user.Room.Stringify() }
+            </p>
+        }
+    </div>
+}

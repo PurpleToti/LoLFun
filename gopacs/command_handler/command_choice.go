@@ -1,12 +1,12 @@
 package command_handler
 
 import (
-	"LoLFun/gopacs/identification"
+	ciad "LoLFun/gopacs/clients_interactions_and_data"
 
 	"github.com/labstack/echo/v4"
 )
 
-func HandleCommand(c echo.Context, raw_command string, user *identification.User) error {
+func HandleCommand(c echo.Context, raw_command string, user *ciad.User) error {
 	main_command, command_args := splitCommand(raw_command)
 	switch main_command {
 	case "hello":
@@ -15,6 +15,12 @@ func HandleCommand(c echo.Context, raw_command string, user *identification.User
 		return echoStringResponse(c, meCommand(user))
 	case "meName":
 		return echoStringResponse(c, meNameCommand(user, command_args[1]))
+	case "createRoom":
+		return echoStringResponse(c, createRoomCommand(user))
+	case "meJoinRoom":
+		return echoStringResponse(c, meJoinRoomCommand(user, command_args[1]))
+	case "newUser":
+		return echoStringResponse(c, newUserCommand())
 	}
 
 	return echoStringResponse(c, jsonCommandResponse{
