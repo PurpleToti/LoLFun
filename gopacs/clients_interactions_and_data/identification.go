@@ -10,6 +10,7 @@ func _createNewUser(c echo.Context) *User {
 	// fmt.Println("Creating user...")
 
 	new_user := CreateNewUser()
+	new_user.CreateAndJoinRoom()
 	WriteUserCookie(c, new_user.User_id)
 	return new_user
 }
@@ -18,6 +19,9 @@ func _refreshUser(c echo.Context, user *User) *User {
 	// fmt.Println("Finding user...")
 
 	user.Last_interaction = time.Now()
+	if user.Room == nil {
+		user.CreateAndJoinRoom()
+	}
 	WriteUserCookie(c, user.User_id)
 	return user
 }

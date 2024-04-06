@@ -11,6 +11,8 @@ const (
 	EC_room_joined
 	EC_already_in_room
 	EC_room_full
+	EC_not_in_room
+	EC_room_empty
 
 	EC_room_created
 	EC_no_room_created

@@ -11,18 +11,19 @@ func (user *User) CreateAndJoinRoom() (*Room, ExitCode) {
 }
 
 func (user *User) JoinRoom(room *Room) ExitCode {
-	switch room.addUser(user) {
-	case EC_ok:
-		user.Room = room
-		return EC_ok
-	case EC_already_in_room:
-		user.Room = room
-		return EC_already_in_room
-	case EC_room_full:
-		return EC_room_full
-	default:
-		return EC_unexpected
+	ec := room.addUser(user)
+	if ec != EC_ok {
+		return ec
 	}
+
+	ec = user._leaveCurrentRoom()
+	if ec != EC_ok {
+		return ec
+	}
+
+	user.Room = room
+
+	return EC_ok
 }
 
 func (user *User) SendMessageToRoom(message string) ExitCode {
@@ -39,5 +40,17 @@ func (user *User) ChangeName(new_name string) ExitCode {
 	}
 
 	user.Name = new_name
+	return EC_ok
+}
+
+func (user *User) _leaveCurrentRoom() ExitCode {
+	if user.Room == nil {
+		return EC_ok
+	}
+	ec := user.Room.freeUser(user)
+	if ec != EC_ok {
+		return ec
+	}
+	user.Room = nil
 	return EC_ok
 }
