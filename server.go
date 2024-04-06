@@ -39,7 +39,7 @@ func main() {
 	e.GET("/commandprompt", commandPromptPage)
 	e.GET("/handlecommand/:command", commandHandler)
 
-	e.Logger.Fatal(e.Start("192.168.1.56:8080"))
+	e.Logger.Fatal(e.Start("localhost:8080"))
 }
 
 func testPage(c echo.Context) error {
