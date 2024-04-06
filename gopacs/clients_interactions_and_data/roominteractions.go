@@ -1,7 +1,5 @@
 package ciad
 
-import "fmt"
-
 func (room *Room) addUser(user *User) ExitCode {
 	var room_pos int = -1
 	for i := 0; i < Users_per_room; i++ {
@@ -42,7 +40,7 @@ func (room *Room) freeUser(user *User) ExitCode {
 			room.Users[i] = nil
 			ec := room.checkExistence()
 			if ec != EC_ok {
-				fmt.Println("Room deleted")
+				DeleteRoom(room.Room_id)
 			}
 
 			return EC_ok

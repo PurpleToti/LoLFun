@@ -100,3 +100,11 @@ func CreateNewRoom() *Room {
 func GetRoomById(room_id string) (*Room, ExitCode) {
 	return _getRoomFromMap(Rooms_map, room_id)
 }
+
+func _deleteRoomFromMap(rmap map[string]*Room, key string) {
+	delete(rmap, key)
+}
+
+func DeleteRoom(room_id string) {
+	_deleteRoomFromMap(Rooms_map, room_id)
+}
