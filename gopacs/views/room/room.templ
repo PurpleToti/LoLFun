@@ -13,8 +13,7 @@ templ RoomContent(lolfunctx *ciad.LoLFunContext) {
     <section class="room__section">
         if lolfunctx.UserRoom != nil {
             @UsersList(lolfunctx.UserRoom)
-            @RoomChat()
-        } else {
+            @RoomChat(lolfunctx.UserRoom.Chat)
             @RoomManagement()
         }
     </section>
@@ -22,7 +21,8 @@ templ RoomContent(lolfunctx *ciad.LoLFunContext) {
 
 templ UsersList(room *ciad.Room) {
     if room != nil {
-    <div>
+    <div id="roomUsersList" hx-get="/room/latest" hx-trigger="every 1s" hx-swap="outerHTML">
+        <p>Id Room : { room.Room_id }</p>
         <h2 class="room__title">Users in the room :</h2>
         <ul class="room__users">
         for i := 0; i < ciad.Users_per_room; i++ {
@@ -37,23 +37,49 @@ templ UsersList(room *ciad.Room) {
     }
 }
 
-templ RoomChat() {
-    <section class="chat__box">
-        <section class="chat__messages" id="chat__messages">
-            <!-- Messages ici -->
-        </section>
-        <form method="post" class="chat__form">
-            <input type="text" name="text_chat" class="chat__input" />
-            <br />
-            <input type="submit" value="SUBMIT" class="chat__submit" />
-        </form>
+templ RoomChatMessages(messages []string) {
+    <section class="chat__messages" id="chat__messages" hx-get="/room/chat" hx-trigger="every 1s" hx-swap="outerHTML">
+        for i := 0; i < len(messages); i++ {
+            <p>{ messages[i] }</p>
+        }
     </section>
+}
+
+templ RoomChat(messages []string) {
+    <section class="chat__box">
+        @RoomChatMessages(messages)
+        <form class="chat__form">
+            <input type="text" name="message" class="chat__input" />
+            <br />
+            <button hx-target="#roomChatNewMessageResponse" hx-post="/room/send" method="post" type="submit" class="chat__submit">SEND MESSAGE</button>
+        </form>
+        <div id="roomChatNewMessageResponse"></div>
+    </section>
+}
+
+templ RoomChatNewMessageResponse(ec ciad.ExitCode) {
+    <p>
+        switch ec {
+            case ciad.EC_ok:
+                Message sent!
+            default:
+                Unexpected behaviour
+        }
+    </p>
 }
 
 templ RoomManagement() {
     <div id="roomGenerationDiv">
         <button hx-target="#roomGenerationDivGetResponse" hx-get="/room/new">CREATE YOUR ROOM!</button>
         <div id="roomGenerationDivGetResponse"></div>
+    </div>
+    <div id="roomJoinDiv">
+        <form>
+            <label for="room_id">Room ID:</label>
+            <input type="text" name="room_id" id="room_id"/>
+            <button hx-target="#roomJoinDivGetResponse" hx-post="/room/join" method="post" type="submit">JOIN ROOM!</button>
+        </form>
+        <div id="roomJoinDivGetResponse"></div>
     </div>
 }
 
@@ -63,6 +89,18 @@ templ RoomManagementNewRoomResponse(ec ciad.ExitCode) {
             case ciad.EC_ok:
                 <div hx-target="#baseMainContent" hx-get="/room" hx-trigger="load"></div>
                 Room created and joined succesfully
+            default:
+                Unexpected behaviour
+        }
+    </p>
+}
+
+templ RoomManagementJoinRoomResponse(ec ciad.ExitCode) {
+    <p>
+        switch ec {
+            case ciad.EC_ok:
+                <div hx-target="#baseMainContent" hx-get="/room" hx-trigger="load"></div>
+                Room joined succesfully
             default:
                 Unexpected behaviour
         }
